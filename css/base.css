@@ -1,0 +1,141 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  /* svh stays stable when mobile browser chrome shows/hides (dvh would reflow the stage). */
+  height: 100svh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+body {
+  position: fixed;
+  inset: 0;
+  font-family: var(--font-body);
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.page-frame {
+  position: fixed;
+  top: var(--frame-inset-top);
+  right: var(--frame-inset-right);
+  bottom: var(--frame-inset-bottom);
+  left: var(--frame-inset-left);
+  border: 1px solid var(--color-ink-soft);
+  pointer-events: none;
+  z-index: var(--z-frame);
+}
+
+.page-frame::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid var(--color-ink-faint);
+}
+
+.corner {
+  position: fixed;
+  width: 46px;
+  height: 46px;
+  z-index: calc(var(--z-frame) + 1);
+  pointer-events: none;
+}
+
+.corner::before,
+.corner::after {
+  content: "";
+  position: absolute;
+  background: color-mix(in srgb, var(--color-ink) 70%, transparent);
+}
+
+.corner::before {
+  width: 100%;
+  height: 1px;
+  top: 0;
+  left: 0;
+}
+
+.corner::after {
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.corner-tl {
+  top: var(--frame-inset-top);
+  left: var(--frame-inset-left);
+}
+
+.corner-tr {
+  top: var(--frame-inset-top);
+  right: var(--frame-inset-right);
+  transform: rotate(90deg);
+}
+
+.corner-bl {
+  bottom: var(--frame-inset-bottom);
+  left: var(--frame-inset-left);
+  transform: rotate(-90deg);
+}
+
+.corner-br {
+  bottom: var(--frame-inset-bottom);
+  right: var(--frame-inset-right);
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
