@@ -1,0 +1,533 @@
+/* =========================================================
+   DOSSIER OVERLAY — page locked; description caps at ~3 lines
+   ========================================================= */
+
+.dossier {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dossier);
+  display: grid;
+  place-items: center;
+  padding:
+    max(var(--space-5), env(safe-area-inset-top, 0px))
+    max(var(--space-4), env(safe-area-inset-right, 0px))
+    max(var(--space-5), env(safe-area-inset-bottom, 0px))
+    max(var(--space-4), env(safe-area-inset-left, 0px));
+  background: color-mix(in srgb, var(--color-black) 80%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  transition:
+    opacity var(--duration-fast) ease,
+    visibility var(--duration-fast) ease;
+}
+
+.dossier.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.dossier-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 68rem);
+  max-height: min(80svh, 40rem);
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--color-panel);
+  border: 1px solid color-mix(in srgb, var(--color-brown) 62%, transparent);
+  box-shadow: 0 15px 28px color-mix(in srgb, var(--color-black) 48%, transparent);
+  padding: clamp(var(--space-4), 2.5vw, var(--space-6));
+  transform: translateY(10px);
+  transition: transform var(--duration-fast) var(--ease-out);
+  user-select: text;
+}
+
+.dossier-panel::before {
+  content: "";
+  position: absolute;
+  inset: clamp(var(--space-2), 1.5vw, var(--space-4));
+  border: 1px solid color-mix(in srgb, var(--color-brown) 18%, transparent);
+  pointer-events: none;
+}
+
+.dossier-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-ink) 35%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 35%, transparent) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.dossier.is-open .dossier-panel {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dossier-panel {
+    transform: none;
+  }
+}
+
+.dossier-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  margin-bottom: var(--space-3);
+  /* Clear fixed close control (viewport corner overlaps panel top-right). */
+  padding-right: calc(var(--dossier-close) + var(--space-4));
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  color: var(--color-muted);
+}
+
+.dossier-meta [data-file] {
+  font-size: var(--fs-caption);
+}
+
+.dossier-body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: clamp(var(--space-4), 3vw, 40px);
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
+}
+
+.dossier-art {
+  position: relative;
+  min-height: 0;
+  background: var(--color-card-inner);
+  border: 1px solid color-mix(in srgb, var(--color-brown) 28%, transparent);
+  display: grid;
+  place-items: center;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+}
+
+.dossier-art img {
+  width: 100%;
+  height: min(38svh, 380px);
+  object-fit: contain;
+}
+
+.art-fig,
+.art-plate,
+.file-no {
+  position: absolute;
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  pointer-events: none;
+}
+
+.art-fig {
+  top: var(--space-2);
+  left: var(--space-3);
+  font-size: var(--fs-caption);
+  color: var(--color-burgundy);
+}
+
+.art-plate {
+  top: var(--space-2);
+  right: var(--space-3);
+  color: var(--color-muted);
+}
+
+.file-no {
+  left: var(--space-3);
+  bottom: var(--space-2);
+  color: var(--color-muted);
+}
+
+.dossier-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  padding-block: var(--space-1);
+  overflow: hidden;
+}
+
+.dossier-number {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  letter-spacing: 0.18em;
+  color: var(--color-muted);
+}
+
+.dossier-text h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.4rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.dossier-text .role {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+}
+
+.section-label {
+  margin-top: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-label);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  color: var(--color-burgundy);
+}
+
+.dossier-stats {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.stat-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.stat-row dt {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-stat);
+  letter-spacing: 0.14em;
+  color: var(--color-white);
+}
+
+.stat-row dt::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px dotted color-mix(in srgb, var(--color-brown) 50%, transparent);
+  transform: translateY(-0.35em);
+}
+
+.stat-row dd {
+  margin: 0;
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body-lg);
+  color: var(--color-ink);
+}
+
+.dossier-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.dossier-section[hidden] {
+  display: none;
+}
+
+.dossier-section .section-label {
+  margin-top: 0;
+}
+
+.dossier-section + .dossier-section,
+.dossier-stats + .dossier-section,
+.role + .section-label {
+  margin-top: var(--space-3);
+}
+
+.dossier-text .description,
+.dossier-text .note {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-body-xl);
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-ink) 88%, transparent);
+}
+
+/* Grow with content up to 3 lines, then scroll. */
+.dossier-text .description {
+  max-height: calc(1.55em * 3);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-brown) 55%, transparent) transparent;
+}
+
+.dossier-text .description::-webkit-scrollbar {
+  width: 5px;
+}
+
+.dossier-text .description::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-brown) 55%, transparent);
+  border-radius: 3px;
+}
+
+.dossier-text .note {
+  color: var(--color-muted);
+  font-size: var(--fs-body-lg);
+}
+
+.dossier-nav {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding-top: var(--space-3);
+}
+
+.dossier-nav button {
+  min-width: 96px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--color-brown) 55%, transparent);
+  font-family: var(--font-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  color: var(--color-ink);
+  transition:
+    background var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
+}
+
+.dossier-nav button:hover,
+.dossier-nav button:focus-visible {
+  background: color-mix(in srgb, var(--color-ink) 6%, transparent);
+  border-color: var(--color-gold);
+}
+
+.dossier-cat {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-top: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--color-muted) 55%, transparent);
+}
+
+.dossier-close {
+  position: fixed;
+  top: max(20px, env(safe-area-inset-top, 0px));
+  right: max(20px, env(safe-area-inset-right, 0px));
+  z-index: calc(var(--z-dossier) + 1);
+  width: var(--dossier-close);
+  height: var(--dossier-close);
+  display: grid;
+  place-items: center;
+  border: 1.5px solid color-mix(in srgb, var(--color-ink) 70%, transparent);
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.dossier-close-icon {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.dossier-close-icon::before,
+.dossier-close-icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 3px;
+  background: var(--color-ink);
+  border-radius: 2px;
+}
+
+.dossier-close-icon::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.dossier-close-icon::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.dossier-close:hover,
+.dossier-close:focus-visible {
+  border-color: var(--color-gold);
+  background: color-mix(in srgb, var(--color-panel) 90%, transparent);
+}
+
+.dossier-hint {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: max(16px, env(safe-area-inset-bottom, 0px));
+  z-index: calc(var(--z-dossier) + 1);
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.17em;
+  color: color-mix(in srgb, var(--color-ink) 86%, transparent);
+  pointer-events: none;
+}
+
+/* Stack on narrow phones AND short landscape (wide but ~390px tall). */
+@media (max-width: 600px), (max-height: 520px) {
+  .dossier {
+    padding:
+      max(var(--space-3), env(safe-area-inset-top, 0px))
+      max(var(--space-3), env(safe-area-inset-right, 0px))
+      max(var(--space-4), env(safe-area-inset-bottom, 0px))
+      max(var(--space-3), env(safe-area-inset-left, 0px));
+  }
+
+  .dossier-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .dossier-panel {
+    width: min(94vw, 68rem);
+    max-height: min(92svh, 44rem);
+    padding: var(--space-3);
+  }
+
+  .dossier-meta {
+    margin-bottom: var(--space-2);
+    padding-right: calc(var(--dossier-close-sm) + var(--space-2));
+  }
+
+  .dossier-art {
+    padding: var(--space-3) var(--space-3) var(--space-2);
+  }
+
+  .dossier-art img {
+    height: min(24svh, 200px);
+  }
+
+  .dossier-text {
+    gap: var(--space-2);
+    /* Single scroller on stacked layouts — description does not nest-scroll. */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-brown) 55%, transparent) transparent;
+    padding-right: 2px;
+  }
+
+  .dossier-text .description {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .dossier-text h2 {
+    font-size: clamp(1.9rem, 11vw, 2.5rem);
+  }
+
+  .dossier-text .role {
+    font-size: var(--fs-body-sm);
+  }
+
+  .section-label {
+    font-size: calc(var(--fs-label) - 2px);
+  }
+
+  .dossier-stats {
+    gap: var(--space-2);
+  }
+
+  .stat-row dt {
+    font-size: var(--fs-body-sm);
+  }
+
+  .stat-row dd {
+    font-size: var(--fs-body);
+  }
+
+  .dossier-text .description {
+    font-size: var(--fs-body-md);
+  }
+
+  .dossier-text .note {
+    font-size: var(--fs-body);
+  }
+
+  .dossier-nav {
+    padding-top: var(--space-2);
+  }
+
+  .dossier-cat {
+    margin-top: var(--space-2);
+  }
+
+  .dossier-hint {
+    font-size: var(--fs-micro);
+    bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .dossier-close {
+    top: max(14px, env(safe-area-inset-top, 0px));
+    right: max(14px, env(safe-area-inset-right, 0px));
+    width: var(--dossier-close-sm);
+    height: var(--dossier-close-sm);
+  }
+
+  .dossier-close-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Extra compression for short landscape after the stack kicks in */
+@media (max-height: 520px) {
+  .dossier-panel {
+    max-height: min(94svh, 44rem);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .dossier-art img {
+    height: min(22svh, 140px);
+  }
+
+  .dossier-text h2 {
+    font-size: clamp(1.5rem, 6vh, 2.2rem);
+  }
+
+  .dossier-hint {
+    display: none;
+  }
+
+  .dossier-meta {
+    padding-right: calc(var(--dossier-close-xs) + var(--space-2));
+  }
+
+  .dossier-close {
+    top: max(10px, env(safe-area-inset-top, 0px));
+    right: max(10px, env(safe-area-inset-right, 0px));
+    width: var(--dossier-close-xs);
+    height: var(--dossier-close-xs);
+  }
+}

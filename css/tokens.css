@@ -1,0 +1,105 @@
+:root {
+  /* Solids — single source of truth (hex only) */
+  --color-bg: #171416;
+  --color-bg-deep: #0d0c0f;
+  --color-panel: #211c1e;
+  --color-card: #292225;
+  --color-card-inner: #30272b;
+  --color-ink: #e1d7d0;
+  --color-muted: #bdaeb1;
+  --color-cream: #efe5d8;
+  --color-brown: #8f737d;
+  --color-burgundy: #8a1738;
+  --color-burgundy-bright: #8d203f;
+  --color-gold: #b08d99;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Alpha variants — always color-mix from a solid token */
+  --color-ink-soft: color-mix(in srgb, var(--color-ink) 48%, transparent);
+  --color-ink-faint: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  --color-burgundy-glow: color-mix(in srgb, var(--color-burgundy) 22%, transparent);
+
+  /* Calora for display letters; Gaibo fills digits/punctuation the demo omits. */
+  --font-display: "Calora", "Gaibo", Georgia, "Times New Roman", serif;
+  --font-body: "Gaibo", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "Cascadia Mono", "Segoe UI Mono", Consolas, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Shared type scale (use instead of one-off px) */
+  --fs-micro: 9px;
+  --fs-caption: 10px;
+  --fs-small: 11px;
+  --fs-body-sm: 12px;
+  --fs-body: 14px;
+  --fs-body-md: 16px;
+  --fs-body-lg: 17px;
+  --fs-body-xl: 19px;
+  --fs-label: 15px;
+  --fs-stat: 14px;
+
+  /* Breakpoints — @media can't use custom props; keep literals in sync:
+     max-width: 600px / 900px, max-height: 520px. Orbit JS reads these. */
+  --bp-phone: 600px;
+  --bp-tablet: 900px;
+  --bp-short: 520px;
+
+  --dossier-close: 56px;
+  --dossier-close-sm: 48px;
+  --dossier-close-xs: 44px;
+
+  --frame-inset-top: max(10px, env(safe-area-inset-top, 0px));
+  --frame-inset-right: max(10px, env(safe-area-inset-right, 0px));
+  --frame-inset-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  --frame-inset-left: max(10px, env(safe-area-inset-left, 0px));
+  --chrome-header-pad-top: max(16px, env(safe-area-inset-top, 0px));
+  --chrome-header-pad-bottom: 10px;
+  --chrome-bottom-pad-top: 10px;
+  /* Sit clearly above both page-frame rules (outer + 9px inner). */
+  --chrome-bottom-pad-bottom: calc(var(--frame-inset-bottom) + 22px);
+
+  /* Nameplate hang under orbit cards — keep JS metrics in sync via this token. */
+  --card-name-pad-y: var(--space-2);
+  --card-name-pad-x: var(--space-3);
+  --card-name-gap: var(--space-2);
+  --nameplate-clearance: 56px;
+
+  --z-bg: 0;
+  --z-stand: 10;
+  --z-chrome: 20;
+  --z-frame: 30;
+  --z-dossier: 50;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 220ms;
+  --duration-enter: 700ms;
+}
+
+@font-face {
+  font-family: "Calora";
+  src: url("../assets/fonts/calora.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Gaibo";
+  src: url("../assets/fonts/gaibo.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 1ms;
+    --duration-enter: 1ms;
+  }
+}
