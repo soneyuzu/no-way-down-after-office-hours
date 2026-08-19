@@ -1,0 +1,431 @@
+body.intro-page {
+  cursor: pointer;
+  background: var(--color-bg-deep);
+}
+
+.intro {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 48%, var(--color-card) 0%, var(--color-panel) 45%, var(--color-bg-deep) 100%);
+  isolation: isolate;
+}
+
+.intro::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 15% 20%, color-mix(in srgb, var(--color-gold) 13%, transparent), transparent 20%),
+    radial-gradient(ellipse at 87% 76%, color-mix(in srgb, var(--color-gold) 11%, transparent), transparent 24%),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--color-white) 1.8%, transparent) 0,
+      color-mix(in srgb, var(--color-white) 1.8%, transparent) 1px,
+      transparent 1px,
+      transparent 5px
+    );
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.art-frame {
+  /* Width is the sole size driver so aspect-ratio never fights max-width
+     (old height:82vh + max-width clamp left a tall empty box → letterboxing). */
+  --art-max-h: min(78dvh, 78vh);
+  --art-max-w: min(92vw, 520px);
+  position: relative;
+  width: min(var(--art-max-w), calc(var(--art-max-h) * 1200 / 1698));
+  height: auto;
+  aspect-ratio: 1200 / 1698;
+  padding: var(--space-3);
+  z-index: 10;
+  background: var(--color-bg);
+  border: 1px solid color-mix(in srgb, var(--color-cream) 72%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-cream) 3.5%, transparent),
+    0 28px 90px color-mix(in srgb, var(--color-black) 48%, transparent);
+}
+
+@keyframes introEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes posterSettle {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro {
+    animation: introEnter 0.8s var(--ease-out) both;
+  }
+
+  .art-frame {
+    animation: posterSettle 0.9s var(--ease-out) both;
+    transition: transform var(--duration-enter) var(--ease-out);
+  }
+
+  .intro:hover .art-frame,
+  .intro:focus-within .art-frame {
+    transform: translateY(-3px) scale(1.008);
+  }
+
+  .artwork img {
+    transition:
+      transform 0.9s var(--ease-out),
+      filter 0.9s ease;
+  }
+
+  .intro:hover .artwork img,
+  .intro:focus-within .artwork img {
+    transform: scale(1.012);
+  }
+}
+
+.art-frame::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent);
+  pointer-events: none;
+  z-index: 30;
+}
+
+.art-frame::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+  border-top: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent);
+  pointer-events: none;
+  z-index: 30;
+}
+
+.artwork {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg-deep);
+}
+
+.artwork img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.micro {
+  position: absolute;
+  z-index: 25;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.24em;
+  color: color-mix(in srgb, var(--color-cream) 46%, transparent);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.micro-one { top: 4.2%; left: 4.5%; }
+.micro-two { top: 4.2%; right: 4.5%; text-align: right; }
+.micro-three { bottom: 4.2%; left: 4.5%; }
+.micro-four {
+  bottom: 4.2%;
+  right: 4.5%;
+  color: color-mix(in srgb, var(--color-gold) 72%, transparent);
+}
+
+.enter {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.25%, env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 40;
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.28em;
+  color: color-mix(in srgb, var(--color-cream) 52%, transparent);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    transition:
+      color 0.35s ease,
+      letter-spacing 0.45s ease;
+  }
+
+  .intro:hover .enter,
+  .intro:focus-within .enter {
+    color: color-mix(in srgb, var(--color-cream) 92%, transparent);
+    letter-spacing: 0.34em;
+  }
+}
+
+.brand-mark {
+  position: absolute;
+  left: 50%;
+  top: max(3.6%, env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  z-index: 25;
+  text-align: center;
+  pointer-events: none;
+  /* Keep clear of the side micro labels on mid widths */
+  max-width: min(52vw, 420px);
+}
+
+.brand-mark .title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(var(--fs-small), 1.6vw, var(--fs-body));
+  font-weight: 400;
+  letter-spacing: 0.34em;
+  color: var(--color-ink);
+}
+
+.brand-mark .subtitle {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-small);
+  letter-spacing: 0.16em;
+  color: color-mix(in srgb, var(--color-muted) 72%, transparent);
+}
+
+.intro.is-leaving {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro.is-leaving {
+    transition: opacity var(--duration-fast) ease;
+    opacity: 0;
+  }
+
+  .intro.is-leaving .art-frame {
+    transform: scale(1.03);
+  }
+}
+
+/* Corner / edge marks */
+
+.side-line {
+  position: absolute;
+  width: 14vw;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    color-mix(in srgb, var(--color-cream) 32%, transparent),
+    transparent
+  );
+  z-index: 5;
+  pointer-events: none;
+}
+
+.side-line.left {
+  left: 1%;
+  top: 50%;
+  transform: rotate(-90deg);
+}
+
+.side-line.right {
+  right: 1%;
+  top: 50%;
+  transform: rotate(90deg);
+}
+
+.star,
+.cross {
+  position: absolute;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.star {
+  width: 22px;
+  height: 22px;
+  transform: rotate(45deg);
+}
+
+.star::before,
+.star::after,
+.cross::before,
+.cross::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: color-mix(in srgb, var(--color-cream) 70%, transparent);
+  transform: translate(-50%, -50%);
+}
+
+.star::before {
+  width: 100%;
+  height: 1px;
+}
+
+.star::after {
+  width: 1px;
+  height: 100%;
+}
+
+.cross {
+  width: 12px;
+  height: 12px;
+  opacity: 0.42;
+}
+
+.cross::before {
+  width: 100%;
+  height: 1px;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.cross::after {
+  width: 100%;
+  height: 1px;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.star-one { left: 11%; top: 22%; }
+.star-two { right: 11%; top: 28%; transform: rotate(45deg) scale(0.65); }
+.star-three { left: 15%; bottom: 18%; transform: rotate(45deg) scale(0.48); }
+.star-four { right: 13%; bottom: 17%; transform: rotate(45deg) scale(0.75); }
+
+.cross-one { left: 7%; top: 31%; }
+.cross-two { right: 7%; top: 37%; }
+.cross-three { left: 9%; bottom: 30%; }
+.cross-four { right: 8%; bottom: 26%; }
+
+.bottom-dash {
+  position: absolute;
+  bottom: 3.4%;
+  left: 50%;
+  width: 88px;
+  height: 1px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--color-cream) 38%, transparent);
+  z-index: 25;
+  pointer-events: none;
+}
+
+.bottom-dash::before,
+.bottom-dash::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 5px;
+  height: 1px;
+  background: var(--color-gold);
+}
+
+.bottom-dash::before { left: -11px; }
+.bottom-dash::after { right: -11px; }
+
+@media (max-width: 600px) {
+  .side-line,
+  .star,
+  .cross {
+    display: none;
+  }
+
+  .art-frame {
+    --art-max-w: min(92vw, 520px);
+    --art-max-h: min(74dvh, 74vh);
+    padding: var(--space-2);
+  }
+
+  .micro {
+    font-size: var(--fs-micro);
+  }
+
+  /* Top micros collide with the brand on narrow widths */
+  .micro-one,
+  .micro-two {
+    display: none;
+  }
+
+  .brand-mark {
+    top: max(2.4%, env(safe-area-inset-top, 0px));
+    max-width: 92vw;
+  }
+
+  .brand-mark .title {
+    font-size: clamp(var(--fs-body-sm), 4.2vw, var(--fs-body));
+    letter-spacing: 0.22em;
+  }
+
+  .enter {
+    font-size: var(--fs-caption);
+    bottom: max(1.6%, env(safe-area-inset-bottom, 0px));
+  }
+
+}
+
+/* Short landscape viewports: keep brand / art / enter from stacking into each other */
+@media (max-height: 520px) {
+  .art-frame {
+    --art-max-h: min(68dvh, 68vh);
+    --art-max-w: min(42vw, 360px);
+    padding: var(--space-2);
+  }
+
+  .brand-mark {
+    top: max(1.2%, env(safe-area-inset-top, 0px));
+    max-width: min(70vw, 520px);
+  }
+
+  .brand-mark .title {
+    font-size: var(--fs-small);
+    letter-spacing: 0.22em;
+  }
+
+  .brand-mark .subtitle {
+    display: none;
+  }
+
+  .micro-one,
+  .micro-two {
+    top: max(1.4%, env(safe-area-inset-top, 0px));
+  }
+
+  .enter {
+    bottom: max(0.8%, env(safe-area-inset-bottom, 0px));
+    letter-spacing: 0.2em;
+  }
+
+  .bottom-dash {
+    display: none;
+  }
+
+}
+
+@media (max-width: 600px) and (max-height: 520px) {
+  .micro-one,
+  .micro-two {
+    display: none;
+  }
+
+  .art-frame {
+    --art-max-h: min(64dvh, 64vh);
+    --art-max-w: min(38vw, 280px);
+  }
+}
